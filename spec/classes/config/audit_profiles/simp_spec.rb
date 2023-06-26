@@ -66,6 +66,19 @@ describe 'auditd' do
             %r(^-a always,exit -F path=/(usr/)?sbin/setfiles -F perm=x -k privileged-priv_change)
           )
         end
+
+        context 'on a host without grub' do
+          let(:facts) { super().merge(grub_version: nil) }
+
+          it 'disables auditing of grub' do
+            is_expected.not_to contain_file('/etc/audit/rules.d/50_00_simp_base.rules').with_content(
+              %r{^-w /boot/grub/grub.conf}
+            )
+            is_expected.not_to contain_file('/etc/audit/rules.d/50_00_simp_base.rules').with_content(
+              %r{^-w /etc/grub.d}
+            )
+          end
+        end
       end
 
       context 'with root audit level set to aggressive' do
@@ -91,7 +104,7 @@ describe 'auditd' do
         'chown'                       => 'disable__audit_chown',
         'attr'                        => 'disable__audit_attr',
         'su-root-activity'            => 'disable__audit_su_root_activity',
-        'suid-root-exec'              => 'disable__audit_suid_sgid',
+        'suid-exec'                   => 'disable__audit_suid_sgid',
         'modules'                     => 'disable__audit_kernel_modules',
         'audit_time_rules'            => 'disable__audit_time',
         'audit_network_modifications' => 'disable__audit_locale',

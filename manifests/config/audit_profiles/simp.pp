@@ -400,7 +400,7 @@ class auditd::config::audit_profiles::simp (
   Boolean                     $audit_su_root_activity                                   = true,
   String[1]                   $audit_su_root_activity_tag                               = 'su-root-activity',
   Boolean                     $audit_suid_sgid                                          = true,
-  String[1]                   $audit_suid_sgid_tag                                      = 'suid-root-exec',
+  String[1]                   $audit_suid_sgid_tag                                      = 'suid-exec',
   Boolean                     $audit_kernel_modules                                     = true,
   String[1]                   $audit_kernel_modules_tag                                 = 'modules',
   Boolean                     $audit_time                                               = true,
@@ -538,6 +538,7 @@ class auditd::config::audit_profiles::simp (
   $_idx = auditd::get_array_index($_short_name, $auditd::config::profiles)
 
   file { "/etc/audit/rules.d/50_${_idx}_${_short_name}_base.rules":
+    mode    => $auditd::config::config_file_mode,
     content => epp("${module_name}/rule_profiles/simp/base.epp")
   }
 }

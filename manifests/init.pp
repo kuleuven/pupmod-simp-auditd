@@ -32,7 +32,7 @@
 #
 # @param ignore_anonymous
 #   For built-in audit profiles, whether to drop anonymous and daemon
-#   events, i.e., events for which ``auid`` is '-1' (aka '4294967295').
+#   events, i.e., events for which ``auid`` is '-1' (aka 'unset').
 #   Audit records from these events are prolific but not useful.
 #
 # @param ignore_crond
@@ -223,7 +223,7 @@ class auditd (
   Auditd::SpaceLeftAction                 $admin_space_left_action  = 'rotate',
   Boolean                                 $at_boot                  = true,
   Integer[0]                              $buffer_size              = 16384,
-  Integer[1,600000]                       $backlog_wait_time        = 60000,
+  Optional[Integer[1,600000]]             $backlog_wait_time        = undef,
   Auditd::DiskErrorAction                 $disk_error_action        = 'syslog',
   Auditd::DiskFullAction                  $disk_full_action         = 'rotate',
   Enum['lossy','lossless']                $disp_qos                 = 'lossy',
@@ -321,7 +321,9 @@ class auditd (
     ~> Class['auditd::service']
     -> Class['auditd']
 
-    Class['auditd::install'] -> Class['::auditd::config::grub']
+    if fact('grub_version') {
+      Class['auditd::install'] -> Class['::auditd::config::grub']
+    }
 
   }
   else {
@@ -332,5 +334,7 @@ class auditd (
   # auditd::config::grub with an include somewhere else. auditd::config::grub
   # would normally be a private class but may be used independently if
   # necessary.
-  class { 'auditd::config::grub': enable => $_grub_enable }
+  if fact('grub_version') {
+    class { 'auditd::config::grub': enable => $_grub_enable }
+  }
 }

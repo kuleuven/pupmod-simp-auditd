@@ -53,17 +53,11 @@ describe 'auditd' do
           it { is_expected.to_not contain_class('auditd::config::logging').that_notifies('Class[auditd::service]') }
           it {
             is_expected.to contain_file('/var/log/audit').with({
-              :ensure => 'directory',
-              :owner  => 'root',
-              :group  => 'root',
-              :mode   => 'o-rwx'
-            })
-          }
-          it {
-            is_expected.to contain_file('/var/log/audit/audit.log').with({
-              :owner  => 'root',
-              :group  => 'root',
-              :mode   => '0600'
+              :ensure  => 'directory',
+              :owner   => 'root',
+              :group   => 'root',
+              :mode    => 'u+rX,g-rwx,o-rwx',
+              :recurse => true
             })
           }
           it { is_expected.to contain_class('auditd::config::audit_profiles') }
@@ -128,18 +122,11 @@ describe 'auditd' do
 
           it {
             is_expected.to contain_file('/var/log/audit').with({
-              :ensure => 'directory',
-              :owner  => 'root',
-              :group  => 'rspec',
-              :mode   => 'o-rwx'
-            })
-          }
-
-          it {
-            is_expected.to contain_file('/var/log/audit/audit.log').with({
-              :owner  => 'root',
-              :group  => 'rspec',
-              :mode   => '0640'
+              :ensure  => 'directory',
+              :owner   => 'root',
+              :group   => 'rspec',
+              :mode    => 'u+rX,g+rX,g-w,o-rwx',
+              :recurse => true
             })
           }
         end
@@ -226,6 +213,7 @@ describe 'auditd' do
               # Auditd Version 3.0 or later specific options
               local_events = yes
               verify_email = yes
+              overflow_action = SYSLOG
               q_depth = 160
               max_restarts = 10
               plugin_dir = /etc/audit/plugins.d

@@ -1,20 +1,21 @@
 ---
 HOSTS:
-  el7:
+  el9:
     roles:
     - default
-    - el7
-    platform: el-7-x86_64
-    box: centos/7
+    - el9
+    platform: el-9-x86_64
+    box: almalinux/centos-stream-9
     hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
     yum_repos:
       chef-current:
-        baseurl: https://packages.chef.io/repos/yum/current/el/7/$basearch
+        baseurl: https://packages.chef.io/repos/yum/current/el/8/$basearch
         gpgkeys:
         - https://packages.chef.io/chef.asc
-    family: centos-cloud/centos-7
+    family: 
     gce_machine_type: n1-standard-2
 CONFIG:
   log_level: verbose
   type: aio
+  vagrant_memsize: 256
   puppet_collection: "<%= ENV.fetch('BEAKER_PUPPET_COLLECTION', 'puppet7') %>"

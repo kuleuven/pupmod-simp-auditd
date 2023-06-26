@@ -19,16 +19,21 @@ class auditd::config {
     $profiles = $auditd::default_audit_profiles
   }
 
-  $log_file_mode = $auditd::log_group ? {
+  $config_file_mode = $auditd::log_group ? {
     'root'  => '0600',
-    default => '0640',
+    default => '0640'
+  }
+
+  $log_file_mode = $auditd::log_group ? {
+    'root'  => 'u+rX,g-rwx,o-rwx',
+    default => 'u+rX,g+rX,g-w,o-rwx'
   }
 
   file { '/etc/audit':
     ensure  => 'directory',
     owner   => 'root',
     group   => $auditd::log_group,
-    mode    => $log_file_mode,
+    mode    => $config_file_mode,
     recurse => true,
     purge   => true
   }
@@ -37,7 +42,7 @@ class auditd::config {
     ensure  => 'directory',
     owner   => 'root',
     group   => $auditd::log_group,
-    mode    => $log_file_mode,
+    mode    => $config_file_mode,
     recurse => true,
     purge   => true
   }
@@ -74,7 +79,7 @@ class auditd::config {
   file { '/etc/audit/auditd.conf':
     owner   => 'root',
     group   => $auditd::log_group,
-    mode    => $log_file_mode,
+    mode    => $config_file_mode,
     content => "${_auditd_conf_common}${_auditd_conf_main}${_auditd_conf_last}\n",
     notify  => Class['auditd::service']
   }
@@ -89,16 +94,11 @@ class auditd::config {
   }
 
   file { '/var/log/audit':
-    ensure => 'directory',
-    owner  => 'root',
-    group  => $auditd::log_group,
-    mode   => 'o-rwx'
-  }
-
-  file { $auditd::log_file:
-    owner => 'root',
-    group => $auditd::log_group,
-    mode  => $log_file_mode
+    ensure  => 'directory',
+    owner   => 'root',
+    group   => $auditd::log_group,
+    mode    => $log_file_mode,
+    recurse => true
   }
 
   if $auditd::syslog {

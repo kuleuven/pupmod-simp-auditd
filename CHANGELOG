@@ -1,3 +1,33 @@
+* Tue Jun 13 2023 Mike Riddle <mike@sicura.us> - 8.9.1
+- All of the rule files will now have the same mode defined for /etc/audit/rules.d
+
+* Tue Nov 15 2022 Joshua Hoblitt <josh@hoblitt.com> - 8.9.0
+- do not include auditd::config::grub on hosts without grub
+- fix simp base profile to work when grub_version fact is not set
+
+* Fri Jul 29 2022 Benedikt Fischer <benedikt.fischer@noris.de> - 8.8.0
+- Make parameter backlog_wait_time optional because there are auditd versions not supporting it
+
+* Fri Jun 24 2022 Trevor Vaughan <trevor@sicura.us> - 8.8.0
+- Add support for Amazon Linux 2
+
+* Sat Jun 11 2022 Trevor Vaughan <trevor@sicura.us> - 8.7.5
+- Actually fix flapping on rotated audit log files
+
+* Fri Jun 03 2022 Trevor Vaughan <trevor@sicura.us> - 8.7.4
+- Ensure that permissions do not flap on rotated audit log files
+
+* Fri May 27 2022 Zach Schulte <zschulte@broadinstitute.org> - 8.7.3
+- Fix the permissions on `/var/log/audit`
+
+* Fri May 13 2022 Mike Riddle <mike@sicura.us> - 8.7.2
+- Changed the auditd_sample_rulesets fact to look in both
+  /usr/share/audit/sample-rules and /usr/share/doc/audit*/rules for
+  sample rulesets.
+
+* Thu Mar 24 2022 Mike Riddle <mike@sicura.us> - 8.7.1
+- Fixed a bug preventing overflow_action from being set properly
+
 * Mon Jun 14 2021 Chris Tessmer <chris.tessmer@onyxpoint.com> - 8.7.0
 - Removed support for Puppet 5
 - Ensured support for Puppet 7 in requirements and stdlib
