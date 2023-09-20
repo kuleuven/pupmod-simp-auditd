@@ -1,3 +1,12 @@
+* Wed Aug 23 2023 Steven Pritchard <steve@sicura.us> - 8.11.0
+- Add AlmaLinux 8 support
+
+* Thu Aug 17 2023 Mike Riddle <mike@sicura.us> - 8.10.1
+- Add RHEL 9 hieradata
+
+* Wed Jul 12 2023 Chris Tessmer <chris.tessmer@onyxpoint.com> - 8.10.0
+- Add RockyLinux 8 support
+
 * Tue Jun 13 2023 Mike Riddle <mike@sicura.us> - 8.9.1
 - All of the rule files will now have the same mode defined for /etc/audit/rules.d
 
